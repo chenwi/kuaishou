@@ -77,6 +77,20 @@ def get_features(user_reg_train, app_train, video_train, user_act_train, begin_d
 
     return df
 
+def data_to_csv(i,):
+    if not os.path.exists(os.path.join(path, 'train_data')):
+        os.makedirs(os.path.join(path, 'train_data'))
+    # -----------train1--------------
+    # train1 以1-16天，预测17-23天
+    user_reg_train = pd.read_csv(os.path.join(path, 'cut_data/user_reg_train%s.csv'%i), encoding='utf-8')
+    app_train1 = pd.read_csv(os.path.join(path, 'cut_data/app_train1.csv'), encoding='utf-8')
+    video_train1 = pd.read_csv(os.path.join(path, 'cut_data/video_train1.csv'), encoding='utf-8')
+    user_act_train1 = pd.read_csv(os.path.join(path, 'cut_data/user_act_train1.csv'), encoding='utf-8')
+    label_train1 = pd.read_csv(os.path.join(path, 'cut_data/label_train1.csv'), encoding='utf-8')
+    # 产生trian1
+    train1 = get_features(user_reg_train1, app_train1, video_train1, user_act_train1, begin_day=7, end_day=16)
+    train1 = pd.merge(train1, label_train1, how='left', on=['user_id'])
+    train1.to_csv(os.path.join(path, 'train_data/data1.csv'), encoding='utf-8', index=False)
 
 if __name__ == '__main__':
     path = os.path.join(os.path.curdir, 'data')
